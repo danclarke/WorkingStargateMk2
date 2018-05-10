@@ -4,6 +4,7 @@
  Author:	dancl
 */
 
+#include "StargateAudio.h"
 #include "AnimationChase.h"
 #include "DialProgram.h"
 #include "StargateControl.h"
@@ -35,6 +36,9 @@ void setup()
 	Serial.begin(115200);
 
 	StargateControl.init();
+	StargateAudio.init();
+
+	//StargateAudio.playTheme();
 
 	// Run this FIRST to populate chevronPositions[] array
 	//StargateControl.displaySymbolOrder();
@@ -50,6 +54,7 @@ void setup()
 
 	uint8_t address[] = {26,6,14,31,11,29,0};
 	DialProgram.dial(address);
+	delay(3000);
 }
 
 // the loop function runs over and over again until power down or reset
