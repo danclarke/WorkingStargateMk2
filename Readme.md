@@ -29,6 +29,7 @@ The custom PCB has all connections and required components marked in the silkscr
  - 11x BC847 SOT23 [C8547](https://lcsc.com/product-detail/Transistors-NPN-PNP_BC847A-1E_C8574.html)
  - 10x 470ohm 0805 Resistor [C114747](https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount_470R-471-5_C114747.html)
  - 2x 10k ohm 0805 Resistor [C84376](https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount_10KR-1002-1_C84376.html)
+ - 1x 10uF 0805 Capacitor [C1713](https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SAMSUNG_CL21A106KOQNNNE_10uF-106-10-16V_C1713.html)
  - 2x 74HC595 SOIC16 [C5947](https://lcsc.com/product-detail/74-Series_Nexperia_74HC595D-118_74HC595D-118_C5947.html)
 
 The board will be at the top of the stack, so you can use standard male header. There's space for either the Motor or Audio shields between the ESP32 and the custom PCB. The other shield will need to go into the vertical mounting position.
