@@ -11,11 +11,11 @@
 
 class DialProgramClass
 {
- public:
+public:
 	void dial(uint8_t address[]);
 
-protected:
-
+private:
+	volatile bool _dialInProgress = false;
 };
 
 extern DialProgramClass DialProgram;

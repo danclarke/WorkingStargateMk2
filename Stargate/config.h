@@ -3,12 +3,16 @@
 
 #include <Adafruit_MotorShield.h>
 
+// WiFi
+#define WIFI_SSID	"Boogle"
+#define WIFI_PASS	"D3f1an7359"
+
 // Pins for various things
 #define PIN_DATA      27
 #define PIN_LATCH     14
 #define PIN_CLOCK     12
 #define PIN_CAL_LED   13
-#define PIN_CAL_LDR   2
+#define PIN_CAL_LDR   35
 
 // Pins for audio shield
 #define AUDIO_DREQ		26
@@ -21,7 +25,7 @@
 #define STEPPER_CHEVRON 2
 
 // Motor control settings
-#define MOTOR_RPM	60
+#define MOTOR_RPM	50
 #define MOTOR_DRIVE	INTERLEAVE // Depending on rpm, SINGLE, DOUBLE, or INTERLEAVE will result in the smoothest / quietest operation
 
 // Offset in the shift register value where the gantry LED is connected
@@ -34,7 +38,7 @@
 #define CALIBRATION_PERCENTAGE		150			// How much brighter the calibration point must be at a minimum above normal background lighting
 #define NUM_CALIBRATION_SAMPLES		10			// Number of initial calibration light readings to take to get a background lighting value
 #define STEPS_CALIBRATION_SAMPLE	50			// Number of steps to move symbol ring when gathering average lighting
-#define CALIBRATION_BRIGHTNESS		1000		// Default brightness for calibration, unused if a full calibration is performed. Take the full calibration value and paste it in here
+#define CALIBRATION_BRIGHTNESS		1500		// Default brightness for calibration, unused if a full calibration is performed. Take the full calibration value and paste it in here
 #define STARGATE_FORWARD			BACKWARD	// 'Forward' direction of gate, relative to motor
 #define STARGATE_BACKWARD			FORWARD		// 'Backward' direction of gate, relative to motor
 #define CHEVRON_ENGAGE				FORWARD		// Motor direction of chevron to 'engage' the chevron

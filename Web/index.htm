@@ -1,0 +1,208 @@
+<html>
+    <head>
+        <!-- Chevrons from: http://www.thescifiworld.net/fonts.htm -->
+        <meta charset="UTF-8"> 
+        <title>Stargate Command</title>
+        <link rel="stylesheet" href="main.css" />
+    </head>
+    <body>
+        <div class="dial-sequence">
+        </div>
+
+        <div class="chevrons">
+            <div class="chevron" num="0">
+                A
+            </div>
+            <div class="chevron" num="1">
+                B
+            </div>
+            <div class="chevron" num="2">
+                C
+            </div>
+            <div class="chevron rotated" num="3">
+                D
+            </div>
+            <div class="chevron" num="4">
+                E
+            </div>
+            <div class="chevron" num="5">
+                F
+            </div>
+            <div class="chevron" num="6">
+                G
+            </div>
+            <div class="chevron rotated" num="7">
+               H
+            </div>
+            <div class="chevron" num="8">
+                I
+            </div>
+            <div class="chevron" num="9">
+                J
+            </div>
+            <div class="chevron rotated2" num="10">
+                K
+            </div>
+            <div class="chevron rotated" num="11">
+                L
+            </div>
+            <div class="chevron rotated" num="12">
+                M
+            </div>
+            <div class="chevron" num="13">
+                N
+            </div>
+            <div class="chevron rotated3" num="14">
+                <div>O</div>
+            </div>
+            <div class="chevron rotated" num="15">
+                P
+            </div>
+            <div class="chevron rotated2" num="16">
+                Q
+            </div>
+            <div class="chevron rotated2" num="17">
+                R
+            </div>
+            <div class="chevron" num="18">
+                S
+            </div>
+            <div class="chevron" num="19">
+                T
+            </div>
+            <div class="chevron rotated" num="20">
+                U
+            </div>
+            <div class="chevron rotated2" num="21">
+                V
+            </div>
+            <div class="chevron" num="22">
+                W
+            </div>
+            <div class="chevron rotated" num="23">
+                X
+            </div>
+            <div class="chevron rotated2" num="24">
+                Y
+            </div>
+            <div class="chevron rotated" num="25">
+                Z
+            </div>
+            <div class="chevron" num="26">
+                a
+            </div>
+            <div class="chevron rotated" num="27">
+                b
+            </div>
+            <div class="chevron rotated2" num="28">
+                c
+            </div>
+            <div class="chevron rotated2" num="29">
+                d
+            </div>
+            <div class="chevron" num="30">
+                e
+            </div>
+            <div class="chevron rotated3" num="31">
+                <div>f</div>
+            </div>
+            <div class="chevron rotated2" num="32">
+                g
+            </div>
+            <div class="chevron" num="33">
+                h
+            </div>
+            <div class="chevron rotated3" num="34">
+                <div>i</div>
+            </div>
+            <div class="chevron rotated" num="35">
+                j
+            </div>
+            <div class="chevron rotated" num="36">
+                k
+            </div>
+            <div class="chevron rotated" num="37">
+                l
+            </div>
+            <div class="chevron" num="38">
+                m
+            </div>
+        </div>
+
+        <div class="animations">
+            <div class="animation" anim="0">
+                Chase
+            </div>
+            <div class="animation" anim="1">
+                Ring
+            </div>
+        </div>
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript">
+            let dialSeq = [];
+            let enableDialing = true;
+
+            function dial() {
+                enableDialing = false;
+
+                $('.dial-sequence').addClass('dialing');
+
+                $.post({
+                    url: 'http://192.168.0.34/update',
+                    data: JSON.stringify({
+                        anim: 2,
+                        sequence: dialSeq
+                    })
+                })
+                .fail(function() {
+                    alert('Could not send dialling sequence!');
+                })
+                .always(function() { 
+                    dialSeq = [];
+                    $('.dial-sequence').html('');
+                    $('.dial-sequence').removeClass('dialing');
+                    enableDialing = true;
+                });
+            }
+
+            $('div.chevrons div.chevron').click(function() {
+                if (!enableDialing)
+                    return;
+
+                const num = +$(this).attr('num');
+                const html = $(this).clone().wrap('<div/>').parent().html();
+
+                const existing = dialSeq.findIndex(function(s){ return s === num; });
+                if (existing >= 0)
+                    return;
+
+                dialSeq.push(num);
+                const newChevron = $(html);
+                newChevron.attr('style', 'transform: rotate(0);');
+                $('.dial-sequence').append(newChevron);
+                setTimeout(function() { newChevron.addClass('show'); }, 10);
+
+                if (dialSeq.length === 7) {
+                    enableDialing = false;
+                    setTimeout(function() { dial(); }, 1200);
+                }
+            });
+
+            $('div.animations div.animation').click(function() {
+                const anim = +$(this).attr('anim');
+
+                $.post({
+                    url: 'http://192.168.0.34/update',
+                    data: JSON.stringify({
+                        anim: anim
+                    })
+                })
+                .fail(function() {
+                    alert('Could not send animation request!');
+                });
+            });
+
+        </script>
+    </body>
+</html>

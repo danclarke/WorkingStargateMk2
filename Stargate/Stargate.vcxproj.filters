@@ -42,6 +42,21 @@
     <ClInclude Include="StargateAudio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WebServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="picohttpparser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="webFiles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cJSON.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StargateLogic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StargateControl.cpp">
@@ -60,6 +75,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StargateAudio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WebServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="picohttpparser.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cJSON.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StargateLogic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

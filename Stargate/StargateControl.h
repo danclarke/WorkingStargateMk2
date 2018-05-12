@@ -46,6 +46,7 @@ protected:
 	uint16_t _ledState;
 	uint8_t _currentSymbol;
 
+	uint16_t getLdrValue();
 	void displayLeds();
 
 	uint16_t getTargetCalibrationBrightness();

@@ -4,6 +4,8 @@
  Author:	dancl
 */
 
+#include "StargateLogic.h"
+#include "WebServer.h"
 #include "StargateAudio.h"
 #include "AnimationChase.h"
 #include "DialProgram.h"
@@ -35,10 +37,11 @@ void setup()
 {
 	Serial.begin(115200);
 
+	// Init everything
 	StargateControl.init();
 	StargateAudio.init();
-
-	//StargateAudio.playTheme();
+	StargateLogic.init();
+	WebServer.init();
 
 	// Run this FIRST to populate chevronPositions[] array
 	//StargateControl.displaySymbolOrder();
@@ -52,14 +55,25 @@ void setup()
 	// Run this NORMALLY to home the gate on start up
 	StargateControl.quickCalibration();
 
-	uint8_t address[] = {26,6,14,31,11,29,0};
-	DialProgram.dial(address);
-	delay(3000);
+	// Run this to TEST the audio playback
+	//StargateAudio.playTheme();
+
+	// Run this to TEST the dial sequence
+	//uint8_t address[] = {26,6,14,31,11,29,0};
+	//DialProgram.dial(address);
 }
 
 // the loop function runs over and over again until power down or reset
+uint8_t loopCount = 0;
 void loop()
 {
-	unsigned long delayTime = AnimationChase.animate();
+	if (loopCount++ == 0)
+	{
+		Serial.print("Free Heap: ");
+		Serial.println(ESP.getFreeHeap());
+	}
+
+	// Run logic at required interval
+	uint32_t delayTime = StargateLogic.loop();
 	delay(delayTime);
 }

@@ -17,12 +17,16 @@ StargateControlClass::StargateControlClass()
 void StargateControlClass::init()
 {
 	// Init motors
-	Wire.begin(-1, -1, I2C_SPEED);
+	Wire.begin();//(-1, -1, I2C_SPEED);
 	_motorShield.begin();  // create with the default frequency 1.6KHz
-	Wire.setClock(I2C_SPEED);
+	//Wire.setClock(I2C_SPEED);
   
 	_motorGate->setSpeed(MOTOR_RPM);
 	_motorChevron->setSpeed(MOTOR_RPM);
+
+	// Analog config for ESP32
+	analogReadResolution(12); //12 bits
+    analogSetAttenuation(ADC_11db);  //For all pins
 
 	// Init general pins
 	pinMode(PIN_DATA, OUTPUT);
@@ -30,8 +34,20 @@ void StargateControlClass::init()
 	pinMode(PIN_CLOCK, OUTPUT);
 	pinMode(PIN_CAL_LED, OUTPUT);
 	pinMode(PIN_CAL_LDR, INPUT);
+}
 
-	// Init buffer
+uint16_t StargateControlClass::getLdrValue()
+{
+	uint16_t val;
+
+	// analogRead() likes to return 4095 from time to time, which is obviously invalid
+	// so keep retrying until something sensible arrives
+	do 
+	{
+		val = analogRead(PIN_CAL_LDR);
+	} while (val == 4095);
+
+	return val;
 }
 
 void StargateControlClass::fullCalibration()
@@ -55,7 +71,7 @@ void StargateControlClass::fullCalibration()
 	_motorGate->step(5, STARGATE_FORWARD, MICROSTEP);
 	uint32_t step = 5;
 
-	while (analogRead(PIN_CAL_LDR) < _calibrationBrightness)
+	while (getLdrValue() < _calibrationBrightness)
 	{
 		_motorGate->step(1, STARGATE_FORWARD, MICROSTEP);
 		displayProgress(++step, NUM_STEPS_CIRCLE);
@@ -194,7 +210,7 @@ bool StargateControlClass::isAtHome()
 	bool atHome;
 
 	digitalWrite(PIN_CAL_LED, HIGH);
-	atHome = analogRead(PIN_CAL_LDR) > _calibrationBrightness;
+	atHome = getLdrValue() > _calibrationBrightness;
 	digitalWrite(PIN_CAL_LED, LOW);
 
 	return atHome;
@@ -202,13 +218,16 @@ bool StargateControlClass::isAtHome()
 
 void StargateControlClass::moveToHome()
 {
+	Serial.println("Moving to home");
 	digitalWrite(PIN_CAL_LED, HIGH);
 
 	// Initially move a few symbols 'backward' to see if we've got a small overrun
 	uint16_t currentStep = 0;
 	bool found = false;
 	bool motorActive = false;
-	while (analogRead(PIN_CAL_LDR) < _calibrationBrightness)
+	Serial.printf("LDR: %i, Threshold: %i\r\n", getLdrValue(), _calibrationBrightness);
+
+	while (getLdrValue() < _calibrationBrightness)
 	{
 		_motorGate->step(1, STARGATE_BACKWARD, MICROSTEP);
 		motorActive = true;
@@ -223,7 +242,7 @@ void StargateControlClass::moveToHome()
 	// If previous find worked, LDR will still be lit up and this loop won't execute
 	// Otherwise scan the entire gate
 	currentStep = 0;
-	while (analogRead(PIN_CAL_LDR) < _calibrationBrightness)
+	while (getLdrValue() < _calibrationBrightness)
 	{
 		_motorGate->step(1, STARGATE_FORWARD, MICROSTEP);
 		displayProgress(++currentStep, NUM_STEPS_CIRCLE);
@@ -274,14 +293,14 @@ uint16_t StargateControlClass::getTargetCalibrationBrightness()
 	digitalWrite(PIN_CAL_LED, HIGH);
 
 	// First get the target brightness for the calibration point
-	uint32_t brightness = analogRead(PIN_CAL_LDR);
+	uint32_t brightness = getLdrValue();
 	Serial.printf("Read in: %i\r\n", brightness);
 	delay(2000);
 
 	for (uint8_t i = 0; i < NUM_CALIBRATION_SAMPLES; ++i)
 	{
 		displayProgress(i, NUM_CALIBRATION_SAMPLES);
-		uint16_t val = analogRead(PIN_CAL_LDR);
+		uint16_t val = getLdrValue();
 		Serial.printf("Read in: %i\r\n", val);
 
 		brightness += val;

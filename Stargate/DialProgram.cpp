@@ -10,6 +10,9 @@ uint8_t chevronLightOrder7Symbol[] = {
 
 void DialProgramClass::dial(uint8_t address[])
 {
+	if (_dialInProgress)
+		return;
+
 	StargateControl.clearDisplay();
 
 	// Home the gate
@@ -60,6 +63,8 @@ void DialProgramClass::dial(uint8_t address[])
 
 	StargateAudio.playCloseWormhole();
 	StargateControl.clearDisplay();
+	_dialInProgress = false;
+	delay(3000);
 }
 
 DialProgramClass DialProgram;

@@ -94,6 +94,7 @@ boolean Adafruit_VS1053_FilePlayer::useInterrupt(uint8_t type) {
 #if defined(ESP32)
 	bufferSemaphore = xSemaphoreCreateBinary();
 	xTaskCreatePinnedToCore(feedTask, "VS1053Feeder", 1536, NULL, 10, NULL, 0); // Arduino main loop is on core 1, so process on the 'other' core
+	//xTaskCreate(feedTask, "VS1053Feeder", 1536, NULL, 10, NULL);
 #endif
 
     int8_t irq = digitalPinToInterrupt(_dreq);

@@ -3,7 +3,7 @@
 Contained within is code for [Glitch's Working Stargate Mk2](https://www.thingiverse.com/thing:1603423). This code is specifically for the ESP32, but could work with other Arduino-compatible platforms. You'll need [VS Micro](http://www.visualmicro.com/) to compile the code as-is, but it should be possible to compile within the Arudino IDE... in theory at least.
 
 ## Requirements
-- ESP32 board in Uno form factor, I used a Wemos R32
+- ESP32 board in Uno form factor with buck converter, I used a Wemos R32
 - [Adafruit Motor Shield v2](https://www.adafruit.com/product/1438)
 - [Adafruit Music Maker Shield](https://www.adafruit.com/product/1788)
  - [Custom PCB](https://easyeda.com/boogleoogle/Stargate-Control), or alternatively wire up yourself using stripboard and the like
